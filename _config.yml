@@ -1,0 +1,53 @@
+# Site settings
+title: Bitsadmin's blog - IT security thoughts by Arris Huijgen
+url: "https://bitsadmin.github.io"
+baseurl: ""
+description: Blog on security research and red teaming
+
+# Your information
+author: Arris Huijgen
+avatar: "/assets/img/bitsadmin.png"
+profile: Security Researcher - Red Teamer
+profile_links:
+  Twitter: "https://twitter.com/bitsadmin"
+  GitHub: "https://github.com/bitsadmin"
+
+# Disqus Comment Service
+# Sign-up at https://disqus.com/admin/signup/
+#disqus_shortname: xxx   
+
+excerpt_separator: <!--more-->
+
+header:
+  # Links on the header. Link to in-site page with a slash as prefix
+  links:             
+    Categories: /categories/
+    About: /about/
+
+permalink: /blog/:title
+
+plugins:
+ - jekyll-paginate
+ - jekyll-gist
+ - jemoji
+
+# Build settings
+paginate: 5
+paginate_path: "page:num"
+
+highlighter: rouge
+markdown: kramdown
+
+# https://jekyllrb.com/docs/configuration/#precedence
+defaults:
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  math_engine: mathjax
