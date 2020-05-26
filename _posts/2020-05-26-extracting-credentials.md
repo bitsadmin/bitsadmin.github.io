@@ -93,7 +93,7 @@ PS C:\> $s | Remove-CimSession
 ```
 
 # Obtain and crack hashes
-With the SYSTEM, SECURITY and SAM files or SYSTEM and NTDS.dit file now in our C:\tmp folder we can use our favorite tool to obtain the hashes. An example of such tool is secretsdump.py from Impacket [2].With the SYSTEM, SECURITY and SAM files or SYSTEM and NTDS.dit file now in our C:\tmp folder we can use our favorite tool to obtain the hashes. An example of such tool is secretsdump.py from Impacket [2].
+With the `SYSTEM`, `SECURITY` and `SAM` files or `SYSTEM` and `NTDS.dit` file now in our `C:\tmp` folder we can use our favorite tool to obtain the hashes. An example of such tool is `secretsdump.py` from Impacket [2]. 
 
 ## SAM
 ```bash
