@@ -1,5 +1,5 @@
 # Site settings
-title: Bitsadmin's blog - IT security thoughts by Arris Huijgen
+title: Bitsadmin's blog - Mystery guest in your IT infrastructure
 url: "https://bitsadmin.github.io"
 baseurl: ""
 description: Blog on security research and red teaming
@@ -7,7 +7,7 @@ description: Blog on security research and red teaming
 # Your information
 author: Arris Huijgen
 avatar: "/assets/img/bitsadmin.png"
-profile: Security Researcher - Red Teamer
+profile: Security Researcher - Red Teamer <span title="Offensive Security Certified Professional">OSCP</span> &bull; <span title="Offensive Security Certified Expert">OSCE</span> &bull; <span title="Offensive Security Exploitation Expert">OSEE</span> 
 profile_links:
   GitHub: "https://github.com/bitsadmin"
   Twitter: "https://twitter.com/bitsadmin"
@@ -22,6 +22,7 @@ excerpt_separator: <!--more-->
 header:
   # Links on the header. Link to in-site page with a slash as prefix
   links:             
+    Tools: /tools/
     Categories: /categories/
     About: /about/
 
