@@ -5,6 +5,11 @@ date:   2020-05-26 09:00:00
 categories: living-off-the-land windows credentials
 permalink: /blog/extracting-credentials-from-remote-windows-system
 ---
+*[WMI]: Windows Management Instrumentation
+*[CIM]: Common Information Model
+*[WinRM]: Windows Remote Management
+*[RPC]: Remote Procedure Call
+*[DCOM]: Distributed Component Object Model
 
 Recently we performed a red teaming engagement where we wanted to dump the credentials from a remote host. We got the credentials of a user which has administrative privileges on the victim host and wanted to get more credentials from that host. Because we felt that the blue team was closely observing the environment this needed to be done in a stealthy manner and preferably only involving native Windows tooling. That is when we came up with the following approach in order to obtain a remote system's `SYSTEM`, `SECURITY` and `SAM` files from `%SystemRoot%\System32\Config` making use of WMI and SMB. This approach can also be used to obtain the `ntds.dit` file from a Domain Controller in order to obtain the credentials of the complete organization.
 
@@ -14,12 +19,14 @@ In this article we will first use our attacker Windows machine to make a shadow 
 # Small introduction to WMI
 WMI stands for Windows Management Instrumentation and can be used to read out management information from Windows and perform actions on a variety of components which provide a WMI interface. WMI can be accessed locally using for example PowerShell, VBScript, wmic.exe and COM, while remotely WMI can be accessed using WinRM and DCOM.
 
+PowerShell provides both WMI and CIM cmdlets. Common Information Model (CIM) is an open standard from the Distributed Management Task Force (DMTF) while WMI is Microsoft's implementation of CIM for Windows. In this article we will use the CIM cmdlets, but the WMI cmdlets will function equally well.
+
 # Session establishment
 In case you are executing this attack from a machine outside of the domain, or whenever you need to use different credentials to authenticate to the victim host, use the `runas.exe` tool to launch your PowerShell with credentials which can be used to authenticate. Now whenever this PowerShell instance is requested to authenticate on the network, it will use the credentials as provided to the `runas.exe` tool. Alternatively the `-Credential` parameter can be used for the `New-CimSession` cmdlet.
 ```
 runas.exe /netonly /user:MyDomain\MyUser powershell.exe
 ```
-After launching PowerShell we start with initiating a new Cim session with the remote host over DCOM and storing this in the `$s` variable. In case you want to use WinRM instead, omit the `-SessionOption` parameter of the `New-CimSession` cmdlet.
+After launching PowerShell we start with initiating a new CIM session with the remote host over DCOM and storing this in the `$s` variable. In case you want to use WinRM instead, omit the `-SessionOption` parameter of the `New-CimSession` cmdlet.
 ```powershell
 PS C:\> $h = 'DC01.mydomain.local'
 PS C:\> $so = New-CimSessionOption -Protocol Dcom
@@ -27,16 +34,17 @@ PS C:\> $s = New-CimSession -ComputerName $h -SessionOption $so
 ```
 
 # Create shadow copy
-Once the session is established we invoke the `Create` function of the `Win32_ShadowCopy` WMI class [1] providing the `Volume` parameter to create a shadow copy of the Windows installation drive which contains the files we want to obtain. Once executed, The `ReturnValue` of `0` shows that creation of the shadow copy was successful. Based on the `ShadowID` we fetch all details of the shadow copy. An alternative to creating a new shadow copy would be to check if there are already any (recent) shadow copies, in which case you can simply use that shadow copy and proceed with the next steps. This can be done by executing the `Get-CimInstance` cmdlet below without the `-Filter` parameter.
+Once the session is established we invoke the `Create` function of the `Win32_ShadowCopy` WMI class [^1] providing the `Volume` parameter to create a shadow copy of the Windows installation drive which contains the files we want to obtain. Once executed, The `ReturnValue` of `0` shows that creation of the shadow copy was successful. Based on the `ShadowID` we fetch all details of the shadow copy. An alternative to creating a new shadow copy would be to check if there are already any (recent) shadow copies, in which case you can simply use that shadow copy and proceed with the next steps. This can be done by executing the `Get-CimInstance` cmdlet below without the `-Filter` parameter.
 
 ```powershell
 PS C:\> $r = Invoke-CimMethod -ClassName Win32_ShadowCopy -MethodName Create -Arguments @{Volume='C:\'} -CimSession $s
-PS C:\> $r
- 
-                            ReturnValue ShadowID                                PSComputerName
-                            ----------- --------                                --------------
-                                      0 {B15008D8-0C63-468C-AED7-ED4DB0CFD082}  DC01.mydomain.local
- 
+PS C:\> $r | fl
+
+
+ReturnValue    : 0
+ShadowID       : {B15008D8-0C63-468C-AED7-ED4DB0CFD082}
+PSComputerName : DC01.mydomain.local
+
  
 PS C:\> $c = Get-CimInstance -ClassName Win32_ShadowCopy -CimSession $s -Filter "ID=`"$($r.ShadowID)`""
 PS C:\> $c
@@ -93,7 +101,7 @@ PS C:\> $s | Remove-CimSession
 ```
 
 # Obtain and crack hashes
-With the `SYSTEM`, `SECURITY` and `SAM` files or `SYSTEM` and `NTDS.dit` file now in our `C:\tmp` folder we can use our favorite tool to obtain the hashes. An example of such tool is `secretsdump.py` from Impacket [2]. 
+With the `SYSTEM`, `SECURITY` and `SAM` files or `SYSTEM` and `NTDS.dit` file now in our `C:\tmp` folder we can use our favorite tool to obtain the hashes. An example of such tool is `secretsdump.py` from Impacket [^2]. 
 
 ## SAM
 ```bash
@@ -113,14 +121,13 @@ Subsequently the resulting hashes can be cracked with tools like John or Hashcat
 # Closing thoughts
 Because the blue team is increasingly monitoring activity on both the network as well as on the machines itself, the red team is increasingly pushed towards using Windows native administrative tooling to stay under the radar. This attack shows that using WMI and SMB you are perfectly able to do that from PowerShell which will blend in with the management activities system administrators are performing on the network and systems.
 
-# References
-1. [Microsoft Docs - Create method of the Win32_ShadowCopy class](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/vsswmi/create-method-in-class-win32-shadowcopy)
-2. [secretsdump.py in the Impacket library repository](https://github.com/SecureAuthCorp/impacket/blob/master/examples/secretsdump.py)
-
 # MITRE ATT&CK® references
-* [Windows Management Instrumentation](https://attack.mitre.org/techniques/T1047/)
-* [Windows Remote Management](https://attack.mitre.org/techniques/T1028/)
-* [Remote File Copy](https://attack.mitre.org/techniques/T1105/)
-* [Windows Admin Shares](https://attack.mitre.org/techniques/T1077/)
-* Also related: [Inhibit System Recovery](https://attack.mitre.org/techniques/T1490/)
+* [T1047: Windows Management Instrumentation](https://attack.mitre.org/techniques/T1047/)
+* [T1028: Windows Remote Management](https://attack.mitre.org/techniques/T1028/)
+* [T1105: Remote File Copy](https://attack.mitre.org/techniques/T1105/)
+* [T1077: Windows Admin Shares](https://attack.mitre.org/techniques/T1077/)
+* Also related: [T1490: Inhibit System Recovery](https://attack.mitre.org/techniques/T1490/)
 
+# References
+[^1]: [Microsoft Docs - Create method of the Win32_ShadowCopy class](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/vsswmi/create-method-in-class-win32-shadowcopy)
+[^2]: [secretsdump.py in the Impacket library repository](https://github.com/SecureAuthCorp/impacket/blob/master/examples/secretsdump.py)
