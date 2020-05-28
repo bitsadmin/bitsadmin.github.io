@@ -10,6 +10,7 @@ permalink: /blog/extracting-credentials-from-remote-windows-system
 *[WinRM]: Windows Remote Management
 *[RPC]: Remote Procedure Call
 *[DCOM]: Distributed Component Object Model
+*[COM]: Component Object Model
 
 Recently we performed a red teaming engagement where we wanted to dump the credentials from a remote host. We got the credentials of a user which has administrative privileges on the victim host and wanted to get more credentials from that host. Because we felt that the blue team was closely observing the environment this needed to be done in a stealthy manner and preferably only involving native Windows tooling. That is when we came up with the following approach in order to obtain a remote system's `SYSTEM`, `SECURITY` and `SAM` files from `%SystemRoot%\System32\Config` making use of WMI and SMB. This approach can also be used to obtain the `ntds.dit` file from a Domain Controller in order to obtain the credentials of the complete organization.
 
