@@ -2,9 +2,13 @@ body {
 	background-color: #e0e0e3;
 }
 
+code, pre {
+    white-space: pre-wrap;
+}
+
 .wrapper {
 	margin: 0 auto;
-	max-width: 1600px;
+	max-width: 1100px;
 }
 @media (max-width: 1120px) {
 	.wrapper {
@@ -49,7 +53,7 @@ body {
 	}
 }
 
-$col-main-width: 1300px;
+$col-main-max-width: 800px;
 $col-secnod-width: 300px;
 $hide-sidebar-screen-width: 1120px;
 
@@ -112,12 +116,12 @@ $hide-sidebar-screen-width: 1120px;
 	}
 }
 
-// Colum
+// Column
 .col-main {
 	position: relative;
 	box-sizing: border-box;
 	padding: 30px;
-	width: $col-main-width;
+    max-width: $col-main-max-width;
 	float: left;
 	animation: ebani-descend ease .5s 1;
 	h1, h2, h3, h4, .post-meta, .rss-link {
@@ -130,9 +134,9 @@ $hide-sidebar-screen-width: 1120px;
 	}
 }
 .col-second {
-	position: relative;
+	position: absolute;
 	box-sizing: border-box;
-	float: right;
+    right: 0px;
 	width: $col-secnod-width;
 	padding: 20px;
 	background: #EEE;
