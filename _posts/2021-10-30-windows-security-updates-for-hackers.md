@@ -26,7 +26,7 @@ permalink: /blog/windows-security-updates-for-hackers
 
 Frequently colleagues and clients get to my (virtual) desk and pose the following question to me: "*I know which patches (KBs) are installed on a Windows system, but how do I know what risks it is exposed to?*". This is a very good question and I am sure there are many more people who are wondering the same when for example testing a client's environment or while working on the OSCP training lab. The challenge is that by simply looking at the list of installed KBs there is no easy way to know what the vulnerabilities the system is exposed to.
 
-In this blog we will look at the process of understanding how Windows versioning works to obtaining the Windows version information and list of installed KBs from the local or a remote system. With this information hackers are able to quickly identify vulnerabilities for the system they are attacking and, if available, use an exploit to extend their foothold. Moreover, using this information a quick assessment can be made to which risks systems are exposed to because of unpatched security vulnerabilities for which possibly even publicly exploits are available. The Windows Exploit Suggester - Next Generation tools `wes.py` and `missingkbs.vbs` that I developed will support the identification process as efficiently as possible.
+In this blog we will look at how Windows versioning works and then go through the steps of obtaining the Windows version information and list of installed KBs from the local or a remote system. With this information we are then able to quickly identify vulnerabilities for the system they are attacking and, if available, use an exploit to extend their foothold. This will help us to quickly assess the risk the system is exposed to. The Windows Exploit Suggester - Next Generation tools `wes.py` and `missingkbs.vbs` that I developed will support the identification process as efficiently as possible.
 
 Before diving into how to identify missing KBs, let's first get some context on how Windows releases work.
 
@@ -39,7 +39,7 @@ As Microsoft does not support OSs forever, there is a sliding time window of OSs
 
 A good first check to perform is to identify whether the OS is still supported. This can be checked by searching the Lifecycle documentation website for the Windows version you have encountered. The URL for this website is: <https://docs.microsoft.com/en-us/lifecycle/products/?products=windows>.
 
-![Example with search for Windows 10](/assets/img/20210831_windows-security-updates/mslifecycle.png "Example with search for Windows 10")
+![Example with search for Windows 10](/assets/img/20211030_windows-security-updates/mslifecycle.png "Example with search for Windows 10")
 Example with search for Windows 10: <https://docs.microsoft.com/en-us/lifecycle/products/?products=windows&terms=Windows%2010>
 
 # Release channels
@@ -148,7 +148,7 @@ wes.py systeminfo.txt -o srv01.csv
 ```
 See below an animation from collecting the OS version and missing patches to identifying the missing patches using WES-NG, including the use of some filters described and the csv output option.
 <video width="740" height="430" controls>
-  <source src="/assets/img/20210831_windows-security-updates/wes.mp4" type="video/mp4">
+  <source src="/assets/img/20211030_windows-security-updates/wes.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
@@ -171,7 +171,7 @@ In case the output needs to be more accurate, another option is to execute WES-N
 ## Automatically verify
 Because manually verifying is still a tedious process, [@DominicBreuker](https://github.com/DominicBreuker) contributed a useful feature to automate the process of looking up the supersedence in the Microsoft Update Catalog by parsing the website and automatically walking the chains. This feature can be used by providing the `--muc-lookup` parameter to the `wes.py` script. After determining the missing patches based on the MSRC dataset, it will take the resulting missing patches and automatically validate each of them at the Microsoft Update Catalog.
 <video width="740" height="430" controls>
-  <source src="/assets/img/20210831_windows-security-updates/muclookup.mp4" type="video/mp4">
+  <source src="/assets/img/20211030_windows-security-updates/muclookup.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 In addition to manually and automatically validating the supersedence using the Microsoft Update Catalog, there also exists a completely different approach to identifying missing patches, which is described in the next section.
@@ -202,7 +202,7 @@ Based on the list of missing KBs it is still challenging to determine the securi
 
 Because `missing.txt` only contains a list of KBs that are missing from the system, it is needed to also specify the operating system. The easiest method though is to first execute `wes.py` with only the `-m` parameter: `wes.py -m missing.txt`. Subsequently from the list of possible operating systems in the output the ID of the relevant operating system can be picked and `wes.py` can be executed again, now also providing the operating system ID: `wes.py -m missing.txt --os 2`.
 <video width="740" height="430" controls>
-  <source src="/assets/img/20210831_windows-security-updates/missing.mp4" type="video/mp4">
+  <source src="/assets/img/20211030_windows-security-updates/missing.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 In some cases WES-NG does not have information about a missing KB. In that case the Microsoft Help pages as listed in the table in the [Security updates](#security-updates) section can be used to obtain information on the KB.
@@ -230,7 +230,7 @@ As mentioned before, unfortunately the MSRC dataset frequently contains incomple
 
 At the end of the collector process, the enriched dataset is stored in the `definitions.zip` file, together with a text file defining the minimum required version of the `wes.py` script and the `Custom.csv` file. This definitions file is then uploaded to the WES-NG GitHub where it will be obtained when updating WES-NG using the `-u` flag.
 
-![Output when running the collector script](/assets/img/20210831_windows-security-updates/collector.png "Output when running the collector script")
+![Output when running the collector script](/assets/img/20211030_windows-security-updates/collector.png "Output when running the collector script")
 
 # Conclusion
 This blog started with an explanation of the Windows Operating System (OS) lifetimes. Next, the various ways to collect information on the Windows OS and installed or missing KBs on a local or remote system have been discussed. This information was subsequentially used to determine what security vulnerabilities the system is exposed to and any public exploits that might already exist for these vulnerabilities. Tooling (WES-NG's `wes.py` and `missingkbs.vbs`) have been introduced to make this process more efficient. Finally, the inner workings and limitations of the WES-NG tooling have been explained.
