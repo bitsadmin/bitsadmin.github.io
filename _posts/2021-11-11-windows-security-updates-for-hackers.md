@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Windows Security Updates for Hackers"
-date:   2021-10-30 09:00:00
+date:   2021-11-11 09:00:00
 categories: windows kbs patches wesng
 permalink: /blog/windows-security-updates-for-hackers
 ---
