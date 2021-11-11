@@ -197,6 +197,31 @@ cscript missingkbs.vbs /F /I:E:\tmp\wsusscn2.cab
 
 The COM object mentioned earlier will be initialized and instructed to use the scanfile to identify any missing KBs on the local system. After execution the list of missing KBs will be printed in the console as well as stored in the `missing.txt` file in the current directory.
 
+```
+C:\>cscript missingkbs.vbs
+Microsoft (R) Windows Script Host Version 5.812
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Windows Exploit Suggester: Missing KBs Identifier v1.0
+https://github.com/bitsadmin/wesng/
+
+[I] Windows Update online is used
+[+] Identifying missing KBs...
+[+] List of missing KBs
+- KB4049411: Update for Windows 10 Version 1607 for x64-based Systems (KB4049411)
+- KB4033631: Update for Windows 10 Version 1607 for x64-based Systems (KB4033631)
+- KB4103720: 2018-05 Cumulative Update for Windows 10 Version 1607 for x64-based Systems (KB4103720)
+- KB4485447: 2019-02 Servicing Stack Update for Windows 10 Version 1607 for x64-based Systems (KB4485447)
+- KB4023057: 2020-06 Update for Windows 10 Version 1607 for x64-based Systems (KB4023057)
+- KB4480730: 2020-06 Update for Windows 10 Version 1607 for x64-based Systems (KB4480730)
+- KB890830: Windows Malicious Software Removal Tool x64 - v5.90 (KB890830)
+- KB2267602: Security Intelligence Update for Microsoft Defender Antivirus - KB2267602 (Version 1.341.548.0)
+[+] Saved list of missing updates in "C:\missing.txt"
+[+] Done!
+
+C:\>
+```
+
 ## wes.py -m
 Based on the list of missing KBs it is still challenging to determine the security vulnerabilities the system is exposed to. Thats why the `missing.txt` result file can now be fed to `wes.py` to get this insight. From version 1.00 the `--missing` (shorthand: `-m`) and `--os` parameters have been added to `wes.py` to facilitate this.
 
