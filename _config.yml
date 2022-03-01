@@ -22,7 +22,6 @@ excerpt_separator: <!--more-->
 header:
   # Links on the header. Link to in-site page with a slash as prefix
   links:             
-    Tools: /tools/
     Categories: /categories/
     About: /about/
 
