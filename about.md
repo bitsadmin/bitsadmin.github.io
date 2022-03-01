@@ -4,21 +4,24 @@ title: About
 permalink: /about/
 ---
 
-I am a technical specialist and manager in Deloitte’s Cyber Security team in which I perform a myriad of roles ranging from technical research and red teaming to innovating the way we work in the Cyber team.
+I have over a decade of experience in offensive security, software engineering, incident response and as a cyber security team lead. As a freelancer I offer these cyber security services through my BITSADMIN company. I am passionate about working on technical cyber security challenges and also the managerial challenge of bringing order into chaos and optimizing productivity using technology.
 
-From my childhood I have been intrigued by computer systems and networks and because of this fascination I have been on a continuous quest to understand more and dig deeper into how things work. In my daily work I use this knowledge to perform state of the art research on the offensive side of security and by performing red teams identifying weaknesses in client’s systems and infrastructures.
+My passion has always been to learn more and deeper on how computer systems and infrastructures work. In my daily work I use this knowledge to perform state of the art research on the offensive side of security and by performing Red/Purple/Orange Team exercises[^1] improving the security of systems and infrastructures. To enrich the knowledge of the global cyber security community, I periodically publish articles on my blog and share open source tools.
 
-Additionally I enjoy bringing order into chaos and optimize processes. In my leadership roles in both the Red Team as well as the broader Secure and Cyber team I do this by pursuing my vision of further making the Cyber team a strong, well-oiled machine in which people can explore and develop their talents and use them in the best way possible to make this world a better place.
+[^1]: Do you know what Red/Purple Teaming is, but are you curious what Orange Teaming is? Check out the Orange Teaming service at the BITSADMIN website!
+
+Besides diving deep in technical topics, I enjoy bringing order into chaos and to optimize productivity using technology. In my past leadership roles in the Red Team as well as the broader Cyber team in Deloitte I have done this by making the Deloitte Cyber team a strong, well-oiled machine in which people can explore and develop their talents and use them in the best way possible to make the world a safer place.
 
 Among other certifications I am holder of the OSCP, OSCE and OSEE certifications from Offensive Security.
+
+If you have any challenge that might match my skills and interests, reach out so we can discuss on how we can collaborate to improve your organization!
 
 You can find and connect with me online on:
 
 * [LinkedIn](https://www.linkedin.com/in/arrishuijgen/)
 * [Twitter](https://twitter.com/bitsadmin/)
 * [GitHub](https://github.com/bitsadmin/)
-* [Website](https://bitsadm.in/)
+* [BITSADMIN website](https://bitsadmin.com/)
+* [Blog](https://bitsadm.in/)
 
-<!--
-> This website is using [laobubu](http://laobubu.net)'s theme: [EasyBook](https://github.com/laobubu/jekyll-theme-EasyBook)
--->
+<br />
