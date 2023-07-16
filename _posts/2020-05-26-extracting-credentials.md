@@ -1,4 +1,4 @@
 ---
 layout: redirect
-permalink: /blog/extracting-credentials-from-remote-windows-system
+permalink: /extracting-credentials-from-remote-windows-system
 ---
