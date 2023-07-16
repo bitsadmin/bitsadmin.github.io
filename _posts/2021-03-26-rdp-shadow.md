@@ -1,4 +1,4 @@
 ---
 layout: redirect
-permalink: /spying-on-users-using-rdp-shadowing
+permalink: /blog/spying-on-users-using-rdp-shadowing
 ---

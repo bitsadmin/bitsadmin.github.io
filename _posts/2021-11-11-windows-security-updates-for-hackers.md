@@ -1,4 +1,4 @@
 ---
 layout: redirect
-permalink: /windows-security-updates-for-hackers
+permalink: /blog/windows-security-updates-for-hackers
 ---
